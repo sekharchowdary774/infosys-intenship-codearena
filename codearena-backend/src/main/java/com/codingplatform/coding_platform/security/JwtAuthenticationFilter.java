@@ -1,6 +1,5 @@
 package com.codingplatform.coding_platform.security;
 
-import com.codingplatform.coding_platform.jwt.JwtService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import lombok.RequiredArgsConstructor;

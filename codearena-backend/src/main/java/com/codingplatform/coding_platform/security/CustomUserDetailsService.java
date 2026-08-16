@@ -1,7 +1,8 @@
 package com.codingplatform.coding_platform.security;
 
-import com.codingplatform.coding_platform.entity.User;
-import com.codingplatform.coding_platform.repository.UserRepository;
+
+import com.codingplatform.coding_platform.users.repository.UserRepository;
+import com.codingplatform.coding_platform.users.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
