@@ -1,0 +1,707 @@
+/* ---------------------------------------------------------------------
+   UserDashboard.css — plain CSS, no framework required
+--------------------------------------------------------------------- */
+
+* {
+  box-sizing: border-box;
+}
+
+.ud-page {
+  min-height: 100vh;
+  background: #1a1a1a;
+  color: #d4d4d4;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}
+
+.ud-page a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---------------- Top nav (shared look with Problems page) ---------------- */
+.ud-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 24px;
+  height: 56px;
+  border-bottom: 1px solid #2c2c2c;
+}
+
+.ud-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #fff;
+  font-size: 16px;
+}
+
+.ud-logo-icon {
+  color: #ffa116;
+  font-size: 18px;
+}
+
+.ud-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: #c9c9c9;
+}
+
+.ud-nav-item {
+  cursor: pointer;
+}
+
+.ud-nav-item:hover {
+  color: #fff;
+}
+
+.ud-spacer {
+  flex: 1;
+}
+
+.ud-header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ud-search-pill {
+  display: flex;
+  align-items: center;
+  background: #2c2c2c;
+  border-radius: 20px;
+  padding: 6px 12px;
+  width: 200px;
+}
+
+.ud-search-pill input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #d4d4d4;
+  font-size: 12px;
+  width: 100%;
+  margin-left: 8px;
+}
+
+.ud-search-pill input::placeholder {
+  color: #7a7a7a;
+}
+
+.ud-icon-muted {
+  color: #9a9a9a;
+}
+
+.ud-coins {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #9a9a9a;
+}
+
+.ud-avatar-sm {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #5a5a5a;
+}
+
+.ud-premium-btn {
+  background: #ffc01e;
+  color: #000;
+  font-weight: 600;
+  font-size: 12px;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ---------------- Layout ---------------- */
+.ud-body {
+  display: flex;
+  gap: 20px;
+  padding: 20px 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  align-items: flex-start;
+}
+
+.ud-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ud-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---------------- Profile card ---------------- */
+.ud-avatar-lg {
+  width: 72px;
+  height: 72px;
+  border-radius: 8px;
+  background: #d9d9d9;
+  position: relative;
+}
+
+.ud-avatar-head {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #a3a3a3;
+}
+
+.ud-avatar-body {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 26px;
+  border-radius: 50% 50% 0 0;
+  background: #a3a3a3;
+}
+
+.ud-avatar-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #4ade80;
+  border: 2px solid #1e1e1e;
+}
+
+.ud-profile-name {
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 12px;
+}
+
+.ud-profile-username {
+  color: #8a8a8a;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.ud-profile-rank {
+  color: #b0b0b0;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.ud-profile-follow {
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+  color: #b0b0b0;
+  margin-top: 10px;
+}
+
+.ud-edit-btn {
+  width: 100%;
+  margin-top: 14px;
+  background: #2c2c2c;
+  color: #fff;
+  border: none;
+  padding: 9px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.ud-edit-btn:hover {
+  background: #3a3a3a;
+}
+
+/* ---------------- Sidebar sections ---------------- */
+.ud-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #d4d4d4;
+  margin-bottom: 12px;
+}
+
+.ud-stat-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.ud-stat-row:last-child {
+  margin-bottom: 0;
+}
+
+.ud-stat-icon {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.ud-stat-icon-blue { color: #60a5fa; }
+.ud-stat-icon-green { color: #4ade80; }
+.ud-stat-icon-teal { color: #2dd4bf; }
+.ud-stat-icon-yellow { color: #fbbf24; }
+
+.ud-stat-main {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 13px;
+  color: #d4d4d4;
+}
+
+.ud-stat-count {
+  font-weight: 600;
+  color: #fff;
+}
+
+.ud-stat-sub {
+  font-size: 11px;
+  color: #7a7a7a;
+  margin-top: 2px;
+}
+
+.ud-lang-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.ud-lang-pill {
+  background: #2c2c2c;
+  color: #d4d4d4;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.ud-lang-count {
+  font-size: 12px;
+  color: #8a8a8a;
+}
+
+.ud-skill-group-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #d4d4d4;
+  margin: 12px 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ud-skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ud-skill-pill {
+  background: #2c2c2c;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: #d4d4d4;
+}
+
+.ud-skill-pill span {
+  color: #7a7a7a;
+  margin-left: 4px;
+}
+
+.ud-empty-note {
+  font-size: 12px;
+  color: #7a7a7a;
+}
+
+/* ---------------- Top row: solved + badges ---------------- */
+.ud-top-row {
+  display: flex;
+  gap: 16px;
+}
+
+.ud-solved-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.ud-donut-wrap {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+}
+
+.ud-donut-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.ud-donut-hole {
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  background: #1e1e1e;
+}
+
+.ud-donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ud-donut-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.ud-donut-value span {
+  font-size: 12px;
+  font-weight: 400;
+  color: #8a8a8a;
+}
+
+.ud-donut-label {
+  font-size: 11px;
+  color: #4ade80;
+}
+
+.ud-donut-attempt {
+  font-size: 11px;
+  color: #7a7a7a;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.ud-diff-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ud-diff-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: #262626;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  min-width: 130px;
+}
+
+.ud-diff-pill-easy { color: #4ade80; }
+.ud-diff-pill-med { color: #fbbf24; }
+.ud-diff-pill-hard { color: #f87171; }
+
+.ud-diff-pill-count {
+  color: #d4d4d4;
+}
+
+.ud-badges-card {
+  width: 260px;
+  flex-shrink: 0;
+}
+
+.ud-badges-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.ud-badges-title {
+  font-size: 12px;
+  color: #b0b0b0;
+}
+
+.ud-badges-count {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.ud-badge-icons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.ud-badge-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+}
+
+.ud-badge-recent-label {
+  font-size: 10px;
+  color: #7a7a7a;
+}
+
+.ud-badge-recent-name {
+  font-size: 12px;
+  color: #d4d4d4;
+  font-weight: 500;
+}
+
+/* ---------------- Heatmap card ---------------- */
+.ud-heatmap-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ud-heatmap-title {
+  font-size: 13px;
+  color: #d4d4d4;
+}
+
+.ud-heatmap-title b {
+  color: #fff;
+}
+
+.ud-heatmap-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 12px;
+  color: #8a8a8a;
+}
+
+.ud-heatmap-scroll {
+  overflow-x: auto;
+}
+
+.ud-heatmap-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, 12px);
+  gap: 3px;
+  min-width: 720px;
+}
+
+.ud-heatmap-cell {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: #262626;
+}
+
+.ud-heat-1 { background: #0e4429; }
+.ud-heat-2 { background: #006d32; }
+.ud-heat-3 { background: #26a641; }
+.ud-heat-4 { background: #39d353; }
+
+.ud-heatmap-empty {
+  text-align: center;
+  padding: 30px;
+  color: #7a7a7a;
+  font-size: 12px;
+}
+
+/* ---------------- Tabs + submissions ---------------- */
+.ud-tabs-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #2c2c2c;
+  margin-bottom: 4px;
+}
+
+.ud-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: #8a8a8a;
+  font-size: 13px;
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.ud-tab:hover {
+  color: #d4d4d4;
+}
+
+.ud-tab-active {
+  color: #fff;
+  border-bottom-color: #ffc01e;
+}
+
+.ud-tabs-spacer {
+  flex: 1;
+}
+
+.ud-view-all {
+  font-size: 12px;
+  color: #8a8a8a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.ud-view-all:hover {
+  color: #d4d4d4;
+}
+
+.ud-submission-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 8px;
+  border-radius: 6px;
+}
+
+.ud-submission-row:nth-child(odd) {
+  background: #1e1e1e;
+}
+
+.ud-submission-title {
+  color: #d4d4d4;
+  font-weight: 500;
+}
+
+.ud-submission-title:hover {
+  color: #ffc01e;
+}
+
+.ud-submission-time {
+  color: #7a7a7a;
+  font-size: 12px;
+}
+
+.ud-list-empty {
+  text-align: center;
+  padding: 32px;
+  color: #7a7a7a;
+  font-size: 12px;
+}
+.ud-heatmap-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+ 
+.ud-heatmap-months {
+  display: flex;
+  padding-left: 20px; /* aligns with weekday column width below */
+  height: 14px;
+}
+ 
+.ud-heatmap-month-label {
+  font-size: 11px;
+  color: #7a7a7a;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+ 
+.ud-heatmap-body {
+  display: flex;
+  gap: 4px;
+}
+ 
+.ud-heatmap-weekdays {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 16px;
+  flex-shrink: 0;
+}
+ 
+.ud-heatmap-weekday-label {
+  height: 12px;
+  font-size: 10px;
+  line-height: 12px;
+  color: #6a6a6a;
+}
+ 
+/* ---------------- Year picker ---------------- */
+ 
+.ud-year-picker {
+  position: relative;
+  margin-left: auto;
+}
+ 
+.ud-year-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #2c2c2c;
+  border: 1px solid #3a3a3a;
+  color: #d4d4d4;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+ 
+.ud-year-btn:hover {
+  background: #3a3a3a;
+}
+ 
+.ud-year-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: #262626;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  min-width: 120px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+  padding: 4px;
+}
+ 
+.ud-year-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  font-size: 12.5px;
+  color: #d4d4d4;
+  border-radius: 5px;
+  cursor: pointer;
+}
+ 
+.ud-year-option:hover {
+  background: #333333;
+}
+ 
+.ud-year-option-active {
+  color: #ffc01e;
+}
+ 

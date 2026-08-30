@@ -2,13 +2,14 @@ package com.codingplatform.coding_platform.problem.service;
 
 import java.util.List;
 
+
+import com.codingplatform.coding_platform.exception.ResourceNotFoundException;
 import com.codingplatform.coding_platform.problem.dto.ProblemRequest;
 import com.codingplatform.coding_platform.problem.dto.ProblemResponse;
 import com.codingplatform.coding_platform.problem.entity.Problem;
 import com.codingplatform.coding_platform.problem.repository.ProblemRepository;
+
 import org.springframework.stereotype.Service;
-
-
 
 import lombok.RequiredArgsConstructor;
 
@@ -78,15 +79,13 @@ public class ProblemService {
     }
 
 
-
-
     // GET BY ID
     public ProblemResponse getProblemById(Long id) {
 
         Problem problem =
                 problemRepository.findById(id)
                         .orElseThrow(
-                                () -> new RuntimeException(
+                                () -> new ResourceNotFoundException(
                                         "Problem not found with id: " + id
                                 )
                         );
@@ -103,7 +102,7 @@ public class ProblemService {
         Problem problem =
                 problemRepository.findById(id)
                         .orElseThrow(
-                                () -> new RuntimeException(
+                                () -> new ResourceNotFoundException(
                                         "Problem not found with id: " + id
                                 )
                         );
@@ -156,14 +155,17 @@ public class ProblemService {
 
         if (!problemRepository.existsById(id)) {
 
-            throw new RuntimeException(
+            throw new ResourceNotFoundException(
                     "Problem not found with id: " + id
             );
         }
 
         problemRepository.deleteById(id);
     }
-    private ProblemResponse convertToResponse(Problem problem) {
+
+
+    private ProblemResponse convertToResponse(
+            Problem problem) {
 
         ProblemResponse response = new ProblemResponse();
 

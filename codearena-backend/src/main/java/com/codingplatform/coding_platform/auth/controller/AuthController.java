@@ -1,9 +1,6 @@
 package com.codingplatform.coding_platform.auth.controller;
 
-import com.codingplatform.coding_platform.auth.dto.LoginRequest;
-import com.codingplatform.coding_platform.auth.dto.LoginResponse;
-import com.codingplatform.coding_platform.auth.dto.RegisterRequest;
-import com.codingplatform.coding_platform.auth.dto.RegisterResponse;
+import com.codingplatform.coding_platform.auth.dto.*;
 
 import com.codingplatform.coding_platform.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,5 +39,35 @@ public class AuthController {
             @Valid @RequestBody LoginRequest request) {
 
         return ResponseEntity.ok(authService.login(request));
+    }
+    // =====================================================
+// FORGOT PASSWORD
+// =====================================================
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(
+            @Valid @RequestBody ForgotPasswordRequest request) {
+
+        authService.forgotPassword(request);
+
+        return ResponseEntity.ok(
+                "Password reset link sent to your email"
+        );
+    }
+
+
+// =====================================================
+// RESET PASSWORD
+// =====================================================
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(
+            @Valid @RequestBody ResetPasswordRequest request) {
+
+        authService.resetPassword(request);
+
+        return ResponseEntity.ok(
+                "Password reset successfully"
+        );
     }
 }

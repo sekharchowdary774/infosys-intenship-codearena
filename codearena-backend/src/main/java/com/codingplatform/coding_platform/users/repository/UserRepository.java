@@ -1,11 +1,12 @@
 package com.codingplatform.coding_platform.users.repository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
+import com.codingplatform.coding_platform.common.Role;
 import com.codingplatform.coding_platform.users.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -18,4 +19,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByUsername(String username);
 
+    long countByCreatedAtBetween(
+            LocalDateTime start,
+            LocalDateTime end
+    );
+    long countByRole(Role role);
 }

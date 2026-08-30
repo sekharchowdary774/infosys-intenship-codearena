@@ -22,6 +22,7 @@ function Login() {
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
 
+
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -35,6 +36,7 @@ function Login() {
 
     setServerError("");
   };
+
 
   const validate = () => {
     const newErrors = {};
@@ -52,6 +54,7 @@ function Login() {
     return Object.keys(newErrors).length === 0;
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -66,31 +69,87 @@ function Login() {
         password: formData.password,
       });
 
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("email", formData.email);
+
+      // =========================
+      // STORE AUTH DATA
+      // =========================
+
+      localStorage.setItem(
+        "token",
+        response.token
+      );
+
+      localStorage.setItem(
+        "email",
+        formData.email
+      );
+
+
+      // =========================
+      // STORE USERNAME
+      // =========================
 
       if (response.username) {
-         localStorage.setItem("username", response.username);
-      } else {
-         localStorage.setItem("username", formData.email.split("@")[0]);
-       }
 
-   navigate("/dashboard");
+        localStorage.setItem(
+          "username",
+          response.username
+        );
+
+      } else {
+
+        localStorage.setItem(
+          "username",
+          formData.email.split("@")[0]
+        );
+      }
+
+
+      // =========================
+      // STORE ROLE
+      // =========================
+
+      localStorage.setItem(
+        "role",
+        response.role
+      );
+
+
+      // =========================
+      // ROLE BASED REDIRECT
+      // =========================
+
+      if (response.role === "ADMIN") {
+
+        navigate("/admin");
+
+      } else {
+
+        navigate("/users");
+      }
+
+
     } catch (error) {
+
       setServerError(
         error.response?.data?.message ||
         "Invalid email or password"
       );
+
     } finally {
+
       setLoading(false);
     }
   };
 
+
   return (
     <AuthLayout>
+
       <AuthHeader />
 
       <form onSubmit={handleSubmit}>
+
         <InputField
           label="Email"
           type="email"
@@ -101,6 +160,7 @@ function Login() {
           error={errors.email}
         />
 
+
         <PasswordField
           label="Password"
           name="password"
@@ -109,6 +169,12 @@ function Login() {
           onChange={handleChange}
           error={errors.password}
         />
+        <div className="forgot-password">
+          <Link to="/forgot-password">
+          Forgot Password?
+          </Link>
+        </div>
+
 
         {serverError && (
           <div className="auth-error">
@@ -116,16 +182,25 @@ function Login() {
           </div>
         )}
 
+
         <SubmitButton
           text="Login"
           loading={loading}
         />
+
       </form>
 
+
       <div className="auth-footer">
+
         Don't have an account?{" "}
-        <Link to="/register">Register</Link>
+
+        <Link to="/register">
+          Register
+        </Link>
+
       </div>
+
     </AuthLayout>
   );
 }
