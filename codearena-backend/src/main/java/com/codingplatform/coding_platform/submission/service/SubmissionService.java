@@ -592,17 +592,81 @@ public class SubmissionService {
     private SubmissionResponse convertToResponse(
             Submission submission) {
 
+        Long userId =
+                submission.getUser().getId();
+
+        Long problemId =
+                submission.getProblem().getId();
+
+        // =============================================
+        // TEST CASE STATISTICS
+        // =============================================
+
+        List<com.codingplatform.coding_platform.submissionresult.dto.SubmissionResultResponse>
+                results =
+                submissionResultService
+                        .getResultsBySubmissionId(
+                                submission.getId()
+                        );
+
+        int passedCount =
+                (int) results.stream()
+                        .filter(result ->
+                                result.getStatus()
+                                        == TestCaseStatus.PASSED
+                        )
+                        .count();
+
+        int totalCount =
+                testCaseRepository
+                        .findByProblemId(problemId)
+                        .size();
+
+        // =============================================
+        // ATTEMPT STATISTICS
+        // =============================================
+
+        long totalAttempts =
+                submissionRepository
+                        .countByUserIdAndProblemId(
+                                userId,
+                                problemId
+                        );
+
+        long correctAttempts =
+                submissionRepository
+                        .countByUserIdAndProblemIdAndStatus(
+                                userId,
+                                problemId,
+                                SubmissionStatus.ACCEPTED
+                        );
+
+        // =============================================
+        // ACCURACY
+        // =============================================
+
+        double accuracy = 0.0;
+
+        if (totalAttempts > 0) {
+
+            accuracy =
+                    Math.round(
+                            (correctAttempts * 10000.0)
+                                    / totalAttempts
+                    ) / 100.0;
+        }
+
+        // =============================================
+        // RESPONSE
+        // =============================================
+
         return new SubmissionResponse(
 
                 submission.getId(),
 
-                submission
-                        .getUser()
-                        .getId(),
+                userId,
 
-                submission
-                        .getProblem()
-                        .getId(),
+                problemId,
 
                 submission.getLanguage(),
 
@@ -614,7 +678,17 @@ public class SubmissionService {
 
                 submission.getErrorMessage(),
 
-                submission.getCreatedAt()
+                submission.getCreatedAt(),
+
+                passedCount,
+
+                totalCount,
+
+                correctAttempts,
+
+                totalAttempts,
+
+                accuracy
         );
     }
     public ExecutionResult runCode(RunRequest request) {

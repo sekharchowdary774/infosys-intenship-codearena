@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 
 import {
   Search,
@@ -217,27 +217,17 @@ export default function UserDashboard() {
         // -------------------------------------------------
 
         setSolvedStats({
+  easySolved: data.easyProblemsSolved ?? 0,
+  easyTotal: data.easyProblems ?? 0,
 
-          easySolved:
-            data.easyProblemsSolved ?? 0,
+  medSolved: data.mediumProblemsSolved ?? 0,
+  medTotal: data.mediumProblems ?? 0,
 
-          easyTotal:
-            data.easyProblems ?? 0,
+  hardSolved: data.hardProblemsSolved ?? 0,
+  hardTotal: data.hardProblems ?? 0,
 
-
-          medSolved:
-            data.mediumProblemsSolved ?? 0,
-
-          medTotal:
-            data.mediumProblems ?? 0,
-
-
-          hardSolved:
-            data.hardProblemsSolved ?? 0,
-
-          hardTotal:
-            data.hardProblems ?? 0,
-        });
+  currentRank: data.currentRank ?? null,
+});
 
 
         // -------------------------------------------------
@@ -519,17 +509,29 @@ export default function UserDashboard() {
             Problems
           </span>
 
-          <span className="ud-nav-item">
-            Contest
-          </span>
-
-          <span className="ud-nav-item">
-            Discuss
-          </span>
-
-          <span className="ud-nav-item">
+          <Link
+            to="/study-plans"
+            className="lc-nav-item"
+          >
+            Studyplan
+          </Link>
+          
+          <Link
+            to="/submissions"
+            className="lc-nav-item"
+          >
+            Submissions
+          </Link>
+          
+          <Link
+            to="/leaderboard"
+            className="lc-nav-dropdown"
+          >
             Leaderboard
-          </span>
+          
+            
+          </Link>
+          
 
           
 
@@ -596,6 +598,11 @@ export default function UserDashboard() {
                 || "Unnamed user"}
 
             </div>
+            <div className="ud-profile-rank">
+              {solvedStats?.currentRank
+               ? `Rank #${solvedStats.currentRank}`
+               : "Unranked"}
+            </div>
 
 
             <button
@@ -639,8 +646,11 @@ export default function UserDashboard() {
                   </span>
 
                   <span className="ud-lang-count">
-                    {language.submissionCount} submissions
-                  </span>
+  {language.problemsSolved}{" "}
+  {language.problemsSolved === 1
+    ? "problem solved"
+    : "problems solved"}
+</span>
 
                 </div>
 

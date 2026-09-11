@@ -11,6 +11,10 @@ import ProblemSolvePage from "./pages/ProblemSolvePage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import EditProfile from "./pages/EditProfile";
+import StudyPlansPage from "./pages/StudyPlansPage";
+import StudyPlanDetailsPage from "./pages/StudyPlanDetailsPage";
+import SubmissionsPage from "./pages/SubmissionsPage";
+import LeaderboardPage from "./pages/LeaderboardPage";
 
 
 function App() {
@@ -37,7 +41,21 @@ function App() {
           path="/edit-profile"
           element={<EditProfile />}
         />
+        <Route
+           path="/study-plans"
+           element={<StudyPlansPage/>}
+        />
+        <Route
+          path="/study-plans/:planId"
+          element={<StudyPlanDetailsPage />}
+           />
+        <Route path="/submissions" element={<SubmissionsPage />} />   
+        <Route
+         path="/leaderboard"
+         element={<LeaderboardPage />}
+        />
       </Routes>
+      
     </BrowserRouter>
   );
 }

@@ -18,6 +18,7 @@ import {
   UserCheck,
   Trophy,
   LogOut,
+  BookOpen,
 } from "lucide-react";
 import api from "../services/axios";
 import "../styles/AdminDashboard.css";
@@ -88,6 +89,8 @@ const EMPTY_PROBLEM_FORM = {
   description: "",
   difficulty: "EASY",
   topic: "",
+  constraints: "",
+  examples: "",
   starterCodeJava: "",
   starterCodePython: "",
   starterCodeCpp: "",
@@ -162,16 +165,22 @@ export default function AdminDashboard() {
   const loadUsers = useCallback(async () => {
     setUsersLoading(true);
     setUsersError(null);
-    const { ok, data } = await apiFetch("/api/admin/users");
+    const { ok, data } = await apiFetch("/users");
     setUsers(ok && Array.isArray(data) ? data : []);
     setUsersLoading(false);
   }, []);
 
   const filteredUsers = useMemo(() => {
-    if (!userQuery.trim()) return users;
-    const q = userQuery.toLowerCase();
-    return users.filter((u) => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q));
-  }, [users, userQuery]);
+  if (!userQuery.trim()) return users;
+
+  const q = userQuery.toLowerCase();
+
+  return users.filter(
+    (u) =>
+      u.username.toLowerCase().includes(q) ||
+      u.email.toLowerCase().includes(q)
+  );
+}, [users, userQuery]);
 
   // ---------------- Submissions ----------------
   const [submissions, setSubmissions] = useState([]);
@@ -219,22 +228,246 @@ export default function AdminDashboard() {
     setLeaderboardLoading(false);
   }, []);
 
-  useEffect(() => {
-    loadStats();
+  // ---------------- Study Plans ----------------
+const [studyPlans, setStudyPlans] = useState([]);
+const [studyPlansLoading, setStudyPlansLoading] = useState(false);
+const [studyPlansError, setStudyPlansError] = useState("");
+
+const [studyPlanModalOpen, setStudyPlanModalOpen] = useState(false);
+
+const [studyPlanForm, setStudyPlanForm] = useState({
+  name: "",
+  slug: "",
+  description: "",
+});
+
+const [studyPlanFormError, setStudyPlanFormError] = useState("");
+
+async function createStudyPlan() {
+
+  if (!studyPlanForm.name.trim()) {
+    setStudyPlanFormError("Study plan name is required.");
+    return;
+  }
+
+  if (!studyPlanForm.slug.trim()) {
+    setStudyPlanFormError("Study plan slug is required.");
+    return;
+  }
+
+  const payload = {
+    name: studyPlanForm.name.trim(),
+    slug: studyPlanForm.slug.trim(),
+    description: studyPlanForm.description.trim(),
+  };
+
+  const { ok, data } = await apiFetch(
+    "/admin/study-plans",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    }
+  );
+
+  if (!ok) {
+    setStudyPlanFormError(
+      data?.message || "Failed to create study plan."
+    );
+    return;
+  }
+
+  setStudyPlans((previous) => [
+    data,
+    ...previous,
+  ]);
+
+  setStudyPlanModalOpen(false);
+
+  setStudyPlanForm({
+    name: "",
+    slug: "",
+    description: "",
+  });
+
+  setStudyPlanFormError("");
+
+  setToast("Study plan created successfully");
+}
+async function deleteStudyPlan(plan) {
+  const confirmed = window.confirm(
+    `Delete "${plan.name}"? This cannot be undone.`
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  const { ok, data } = await apiFetch(
+    `/admin/study-plans/${plan.id}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  if (!ok) {
+    setToast(
+      data?.message || "Failed to delete study plan."
+    );
+    return;
+  }
+
+  setStudyPlans((previous) =>
+    previous.filter(
+      (item) => item.id !== plan.id
+    )
+  );
+
+  setToast("Study plan deleted successfully");
+}
+
+const loadStudyPlans = useCallback(async () => {
+
+  setStudyPlansLoading(true);
+  setStudyPlansError("");
+
+  const { ok, data } = await apiFetch("/study-plans");
+
+  if (ok && Array.isArray(data)) {
+    setStudyPlans(data);
+  } else {
+    setStudyPlans([]);
+
+    setStudyPlansError(
+      data?.message || "Failed to load study plans."
+    );
+  }
+
+  setStudyPlansLoading(false);
+
+}, []);
+
+useEffect(() => {
+  if (section === "problems") {
     loadProblems();
+  }
+
+  if (section === "users") {
     loadUsers();
-  }, [loadStats, loadProblems, loadUsers]);
+  }
 
-  useEffect(() => {
-    if (section === "submissions") {
-      loadSubmissions();
+  if (section === "submissions") {
+    loadSubmissions();
+  }
+
+  if (section === "leaderboard") {
+    loadLeaderboard();
+  }
+
+  if (section === "study-plans") {
+    loadStudyPlans();
+  }
+}, [
+  section,
+  loadProblems,
+  loadUsers,
+  loadSubmissions,
+  loadLeaderboard,
+  loadStudyPlans
+]);
+
+const [manageStudyPlan, setManageStudyPlan] = useState(null);
+const [manageStudyPlanProblems, setManageStudyPlanProblems] = useState([]);
+const [manageStudyPlanLoading, setManageStudyPlanLoading] = useState(false);
+const [selectedProblemId, setSelectedProblemId] = useState("");
+const [problemOrderNumber, setProblemOrderNumber] = useState("");
+
+async function openManageStudyPlan(plan) {
+  setManageStudyPlan(plan);
+  setManageStudyPlanProblems([]);
+  setSelectedProblemId("");
+  setProblemOrderNumber("");
+  setManageStudyPlanLoading(true);
+
+  const { ok, data } = await apiFetch(
+    `/study-plans/${plan.id}/problems`
+  );
+
+  setManageStudyPlanLoading(false);
+
+  if (!ok) {
+    setToast(data?.message || "Failed to load study plan problems.");
+    return;
+  }
+
+  setManageStudyPlanProblems(data);
+}
+
+async function addProblemToStudyPlan() {
+  if (!selectedProblemId) {
+    setToast("Please select a problem.");
+    return;
+  }
+
+  if (!problemOrderNumber || Number(problemOrderNumber) <= 0) {
+    setToast("Please enter a valid order number.");
+    return;
+  }
+
+  const { ok, data } = await apiFetch(
+    `/admin/study-plans/${manageStudyPlan.id}/problems`,
+    {
+      method: "POST",
+      data: {
+        problemId: Number(selectedProblemId),
+        orderNumber: Number(problemOrderNumber),
+      },
     }
+  );
 
-    if (section === "leaderboard") {
-      loadLeaderboard();
+  if (!ok) {
+    setToast(data?.message || "Failed to add problem.");
+    return;
+  }
+
+  setManageStudyPlanProblems((previous) => [
+    ...previous,
+    data,
+  ].sort((a, b) => a.orderNumber - b.orderNumber));
+
+  setSelectedProblemId("");
+  setProblemOrderNumber("");
+
+  setToast("Problem added to study plan.");
+}
+
+async function removeProblemFromStudyPlan(planProblemId) {
+  const confirmed = window.confirm(
+    "Remove this problem from the study plan?"
+  );
+
+  if (!confirmed) return;
+
+  const { ok, data } = await apiFetch(
+    `/admin/study-plans/problems/${planProblemId}`,
+    {
+      method: "DELETE",
     }
-  }, [section, loadSubmissions, loadLeaderboard]);
+  );
 
+  if (!ok) {
+    setToast(data?.message || "Failed to remove problem.");
+    return;
+  }
+
+  setManageStudyPlanProblems((previous) =>
+    previous.filter((problem) => problem.id !== planProblemId)
+  );
+
+  setToast("Problem removed from study plan.");
+}
   // ---------------- Problem modal (add / edit) ----------------
   const [problemModalOpen, setProblemModalOpen] = useState(false);
   const [editingProblemId, setEditingProblemId] = useState(null);
@@ -256,6 +489,8 @@ export default function AdminDashboard() {
     description: p.description || "",
     difficulty: p.difficulty || "EASY",
     topic: p.topic || "",
+    constraints: p.constraints || "",
+    examples: p.examples || "",
     starterCodeJava: p.starterCodeJava || "",
     starterCodePython: p.starterCodePython || "",
     starterCodeCpp: p.starterCodeCpp || "",
@@ -298,6 +533,10 @@ export default function AdminDashboard() {
 
     topic:
       problemForm.topic.trim(),
+    
+    constraints: problemForm.constraints,
+
+     examples: problemForm.examples,  
 
     starterCodeJava:
       problemForm.starterCodeJava,
@@ -533,7 +772,7 @@ export default function AdminDashboard() {
       body: JSON.stringify({ role: nextRole }),
     });
     setUsers((prev) => prev.map((x) => (x.id === u.id ? { ...x, role: nextRole } : x)));
-    setToast(nextRole === "admin" ? `${u.name} promoted to admin` : `${u.name} demoted to user`);
+    setToast(nextRole === "admin" ? `${u.username} promoted to admin` : `${u.username} demoted to user`);
   }
 
   async function toggleUserStatus(u) {
@@ -544,7 +783,7 @@ export default function AdminDashboard() {
       body: JSON.stringify({ status: nextStatus }),
     });
     setUsers((prev) => prev.map((x) => (x.id === u.id ? { ...x, status: nextStatus } : x)));
-    setToast(nextStatus === "banned" ? `${u.name} banned` : `${u.name} unbanned`);
+    setToast(nextStatus === "banned" ? `${u.username} banned` : `${u.username} unbanned`);
   }
 
   return (
@@ -585,6 +824,16 @@ export default function AdminDashboard() {
           onClick={() => setSection("leaderboard")}
         >
           <Trophy size={16} /> Leaderboard
+        </button>
+        <button
+            className={`ad-nav-item ${
+            section === "study-plans"
+            ? "ad-nav-item-active"
+            : ""
+           }`}
+           onClick={() => setSection("study-plans")}
+          >
+           <BookOpen size={16} /> Study Plans
         </button>
 
         <button
@@ -675,7 +924,7 @@ export default function AdminDashboard() {
                     <th>Title</th>
                     <th>Difficulty</th>
                     <th>Tags</th>
-                    <th>Status</th>
+                    <th>Problem_Id</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -803,7 +1052,7 @@ export default function AdminDashboard() {
                     users.length > 0 &&
                     filteredUsers.map((u) => (
                       <tr key={u.id}>
-                        <td className="ad-td-title">{u.name}</td>
+                        <td className="ad-td-title">{u.username}</td>
                         <td className="ad-td-muted">{u.email}</td>
                         <td>
                           <span className={`ad-badge ${u.role === "admin" ? "ad-badge-admin" : "ad-badge-user"}`}>
@@ -1068,6 +1317,182 @@ export default function AdminDashboard() {
             </div>
           </>
         )}
+        {section === "study-plans" && (
+  <>
+    <div className="ad-header">
+
+      <div>
+
+        <h1 className="ad-title">
+          Study Plans
+        </h1>
+
+        <div className="ad-subtitle">
+          Create and manage curated coding study plans
+        </div>
+
+      </div>
+
+
+      <button
+        className="ad-btn ad-btn-primary"
+        onClick={() => {
+       setStudyPlanForm({
+         name: "",
+         slug: "",
+        description: "",
+      });
+
+  setStudyPlanFormError("");
+
+  setStudyPlanModalOpen(true);
+}}
+      >
+        <Plus size={16} />
+        Create study plan
+      </button>
+
+    </div>
+
+
+    {studyPlansError && (
+      <div className="ad-table-error">
+        {studyPlansError}
+      </div>
+    )}
+
+
+    <div className="ad-table-wrap">
+
+      <table className="ad-table">
+
+        <thead>
+
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Slug</th>
+            <th>Problems</th>
+            <th>Progress</th>
+            <th></th>
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          {studyPlansLoading && (
+            <tr>
+
+              <td
+                colSpan={6}
+                className="ad-table-empty"
+              >
+                Loading study plans…
+              </td>
+
+            </tr>
+          )}
+
+
+          {!studyPlansLoading &&
+            !studyPlansError &&
+            studyPlans.length === 0 && (
+
+              <tr>
+
+                <td
+                  colSpan={6}
+                  className="ad-table-empty"
+                >
+
+                  <div className="ad-table-empty-title">
+                    No study plans yet
+                  </div>
+
+                  <div className="ad-table-empty-sub">
+                    Create your first study plan.
+                  </div>
+
+                </td>
+
+              </tr>
+            )}
+
+
+          {!studyPlansLoading &&
+            !studyPlansError &&
+            studyPlans.map((plan) => (
+
+              <tr key={plan.id}>
+
+                <td className="ad-td-muted">
+                  #{plan.id}
+                </td>
+
+
+                <td className="ad-td-title">
+                  {plan.name}
+                </td>
+
+
+                <td className="ad-td-muted">
+                  {plan.slug}
+                </td>
+
+
+                <td>
+                  {plan.totalProblems ?? 0}
+                </td>
+
+
+                <td>
+
+                  <span className="ad-badge ad-badge-active">
+                    {plan.progressPercentage ?? 0}%
+                  </span>
+
+                </td>
+
+
+                <td>
+
+                  <div className="ad-row-actions">
+
+                    <button
+                      className="ad-icon-btn"
+                      title="Manage study plan"
+                      onClick={() => openManageStudyPlan(plan)}
+                    >
+                   <Pencil size={14} />
+                    </button>
+
+
+                    <button
+                      className="ad-icon-btn ad-icon-btn-danger"
+                      title="Delete study plan"
+                      onClick={() => deleteStudyPlan(plan)}
+                    >
+                   <Trash2 size={14} />
+                      </button>
+
+                  </div>
+
+                </td>
+
+              </tr>
+
+            ))}
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </>
+)}
       </main>
 
       {/* ---------------- Add / edit problem modal ---------------- */}
@@ -1105,7 +1530,7 @@ export default function AdminDashboard() {
                 </select>
               </div>
               <div className="ad-field">
-                <label className="ad-label">Tags (comma separated)</label>
+                <label className="ad-label">Topic (comma separated)</label>
                 <input
                   className="ad-input"
                   value={problemForm.tags}
@@ -1135,22 +1560,30 @@ export default function AdminDashboard() {
               />
             </div>
             <div className="ad-field">
-              <label className="ad-label">
-                Topic
-              </label>
+  <label className="ad-label">
+    Examples
+  </label>
 
-           <input
-             className="ad-input"
-             value={problemForm.topic}
-             onChange={(e) =>
-               setProblemForm({
-               ...problemForm,
-               topic: e.target.value
-              })
-            }
-            placeholder="e.g. Arrays"
-             />
-           </div>
+  <textarea
+    className="ad-textarea"
+    value={problemForm.examples}
+    onChange={(e) =>
+      setProblemForm({
+        ...problemForm,
+        examples: e.target.value
+      })
+    }
+    placeholder={`Example 1:
+Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+Explanation: nums[0] + nums[1] = 9
+
+Example 2:
+Input: nums = [3,2,4], target = 6
+Output: [1,2]
+Explanation: nums[1] + nums[2] = 6`}
+  />
+</div>
             <div className="ad-field">
               <label className="ad-label">
                Java Starter Code
@@ -1348,8 +1781,247 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+            {/* ---------------- Study Plan modal ---------------- */}
+      {studyPlanModalOpen && (
+        <div
+          className="ad-modal-overlay"
+          onClick={() => setStudyPlanModalOpen(false)}
+        >
+          <div
+            className="ad-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="ad-modal-header">
+              <h2 className="ad-modal-title">
+                Create Study Plan
+              </h2>
 
-      <Toast message={toast} onDone={() => setToast("")} />
+              <button
+                className="ad-modal-close"
+                onClick={() => setStudyPlanModalOpen(false)}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="ad-field">
+              <label className="ad-label">
+                Name
+              </label>
+
+              <input
+                className="ad-input"
+                value={studyPlanForm.name}
+                onChange={(e) =>
+                  setStudyPlanForm({
+                    ...studyPlanForm,
+                    name: e.target.value,
+                  })
+                }
+                placeholder="e.g. CodeArena Blind 75"
+              />
+            </div>
+
+            <div className="ad-field">
+              <label className="ad-label">
+                Slug
+              </label>
+
+              <input
+                className="ad-input"
+                value={studyPlanForm.slug}
+                onChange={(e) =>
+                  setStudyPlanForm({
+                    ...studyPlanForm,
+                    slug: e.target.value,
+                  })
+                }
+                placeholder="e.g. codearena-blind-75"
+              />
+            </div>
+
+            <div className="ad-field">
+              <label className="ad-label">
+                Description
+              </label>
+
+              <textarea
+                className="ad-textarea"
+                value={studyPlanForm.description}
+                onChange={(e) =>
+                  setStudyPlanForm({
+                    ...studyPlanForm,
+                    description: e.target.value,
+                  })
+                }
+                placeholder="Describe this study plan"
+              />
+            </div>
+
+            {studyPlanFormError && (
+              <div className="ad-field-error">
+                {studyPlanFormError}
+              </div>
+            )}
+
+            <div className="ad-modal-footer">
+              <button
+                className="ad-btn ad-btn-secondary"
+                onClick={() => setStudyPlanModalOpen(false)}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="ad-btn ad-btn-primary"
+                onClick={createStudyPlan}
+              >
+                <Plus size={14} />
+                Create Study Plan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {manageStudyPlan && (
+  <div
+    className="ad-modal-overlay"
+    onClick={() => setManageStudyPlan(null)}
+  >
+    <div
+      className="ad-modal"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <div className="ad-modal-header">
+        <div>
+          <h2>{manageStudyPlan.name}</h2>
+          <p>Manage problems in this study plan</p>
+        </div>
+
+        <button
+          className="ad-icon-btn"
+          onClick={() => setManageStudyPlan(null)}
+        >
+          <X size={18} />
+        </button>
+      </div>
+
+      <div className="ad-form-grid">
+
+        <div className="ad-form-group">
+          <label>Select Problem</label>
+
+          <select
+            value={selectedProblemId}
+            onChange={(e) => setSelectedProblemId(e.target.value)}
+          >
+            <option value="">Select a problem</option>
+
+            {problems.map((problem) => (
+              <option
+                key={problem.id}
+                value={problem.id}
+              >
+                {problem.title}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="ad-form-group">
+          <label>Order Number</label>
+
+          <input
+            type="number"
+            min="1"
+            value={problemOrderNumber}
+            onChange={(e) =>
+              setProblemOrderNumber(e.target.value)
+            }
+            placeholder="Example: 1"
+          />
+        </div>
+
+      </div>
+
+      <div className="ad-modal-actions">
+        <button
+          className="ad-btn ad-btn-secondary"
+          onClick={() => setManageStudyPlan(null)}
+        >
+          Cancel
+        </button>
+
+        <button
+          className="ad-btn ad-btn-primary"
+          onClick={addProblemToStudyPlan}
+        >
+          <Plus size={14} />
+          Add Problem
+        </button>
+      </div>
+
+      <div className="ad-section-divider" />
+
+      <div className="ad-modal-section">
+        <h3>
+          Problems
+          <span>
+            {manageStudyPlanProblems.length}
+          </span>
+        </h3>
+
+        {manageStudyPlanLoading ? (
+          <div className="ad-empty-state">
+            Loading problems...
+          </div>
+        ) : manageStudyPlanProblems.length === 0 ? (
+          <div className="ad-empty-state">
+            No problems added to this study plan yet.
+          </div>
+        ) : (
+          <div className="ad-study-plan-problems">
+
+            {manageStudyPlanProblems.map((problem) => (
+              <div
+                key={problem.id}
+                className="ad-study-plan-problem"
+              >
+                <div className="ad-study-plan-problem-order">
+                  {problem.orderNumber}
+                </div>
+
+                <div className="ad-study-plan-problem-info">
+                  <strong>{problem.title}</strong>
+
+                  <span>
+                    {problem.difficulty} · {problem.topic}
+                  </span>
+                </div>
+
+                <button
+                  className="ad-icon-btn ad-icon-btn-danger"
+                  title="Remove problem"
+                  onClick={() =>
+                    removeProblemFromStudyPlan(problem.id)
+                  }
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            ))}
+
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
+      <Toast
+        message={toast}
+        onDone={() => setToast("")}
+      />
     </div>
   );
 }

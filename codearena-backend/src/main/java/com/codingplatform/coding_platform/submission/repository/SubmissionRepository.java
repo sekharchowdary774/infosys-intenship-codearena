@@ -107,4 +107,12 @@ public interface SubmissionRepository
             Difficulty difficulty,
             SubmissionStatus status
     );
+    long countByProblemId(Long problemId);
+
+    long countByProblemIdAndStatus(
+            Long problemId,
+            SubmissionStatus status
+    );
+    long countByUserIdAndProblemId(Long userId, Long problemId);
+
 }

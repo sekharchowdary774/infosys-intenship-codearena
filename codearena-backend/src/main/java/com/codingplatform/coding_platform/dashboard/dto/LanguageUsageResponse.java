@@ -9,5 +9,5 @@ public class LanguageUsageResponse {
 
     private String language;
 
-    private Long submissionCount;
+    private Long problemsSolved;
 }

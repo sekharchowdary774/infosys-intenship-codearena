@@ -9,7 +9,6 @@ import {
   Bell,
   Coins,
   ChevronDown,
-  Star,
   Lock,
   Check,
   CheckCircle2,
@@ -22,10 +21,7 @@ import {
   LogOut
 } from "lucide-react";
 
-import {
-  useNavigate
-} from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/ProblemsPage.css";
 import api from "../services/axios";
 
@@ -58,9 +54,9 @@ const DIFFICULTY_ORDER = {
 // Problem Status
 // ---------------------------------------------------------------------------
 
-function StatusIcon({ status }) {
+function StatusIcon({ solved }) {
 
-  if (status === "done") {
+  if (solved) {
 
     return (
       <Check
@@ -71,9 +67,19 @@ function StatusIcon({ status }) {
     );
   }
 
-  return (
-    <span className="lc-checkbox" />
-  );
+  // return (
+  //   <span className="lc-checkbox" />
+  // );
+}
+
+// Checks whichever field your backend actually sends for "did this user
+// solve this problem" — supports a plain boolean (p.solved) or a status
+// string in a few common shapes, so this doesn't silently break if the
+// backend field name changes.
+function isProblemSolved(p) {
+  if (p.solved === true) return true;
+  const status = String(p.status || "").toUpperCase();
+  return status === "SOLVED" || status === "DONE" || status === "ACCEPTED";
 }
 
 
@@ -105,11 +111,9 @@ function formatDateKey(date) {
 
 function buildMonthGrid(year, month) {
 
-  // month is 0-indexed (0 = January), matching JS Date conventions.
-
   const firstOfMonth = new Date(year, month, 1);
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const startWeekday = firstOfMonth.getDay(); // 0 = Sunday
+  const startWeekday = firstOfMonth.getDay();
 
   const cells = [];
 
@@ -148,20 +152,11 @@ export default function ProblemsPage() {
 
   const navigate = useNavigate();
 
-
-  // ---------------- Search ----------------
-
   const [query, setQuery] =
     useState("");
 
-
-  // ---------------- Topic ----------------
-
   const [activeTab, setActiveTab] =
     useState("All Topics");
-
-
-  // ---------------- Problems ----------------
 
   const [problems, setProblems] =
     useState([]);
@@ -173,11 +168,7 @@ export default function ProblemsPage() {
     useState(null);
 
 
-  // -------------------------------------------------------------------------
-  // Load problems from backend
-  // -------------------------------------------------------------------------
-
- useEffect(() => {
+  useEffect(() => {
 
   let cancelled = false;
 
@@ -238,30 +229,15 @@ export default function ProblemsPage() {
 
 }, []);
 
-// ---------------------------------------------------------------------------
-// Dynamic topics
-// ---------------------------------------------------------------------------
-//
-// Your backend currently has one `topic` String field.
-//
-// We also support comma-separated topics:
-//
-// "Array, Hash Table"
-//
-// so the frontend can count both topics correctly.
-// ---------------------------------------------------------------------------
-
   const topicCounts = useMemo(() => {
 
     const counts = {};
-
 
     problems.forEach((problem) => {
 
       if (!problem.topic) {
         return;
       }
-
 
       const topics =
         String(problem.topic)
@@ -271,7 +247,6 @@ export default function ProblemsPage() {
           )
           .filter(Boolean);
 
-
       topics.forEach((topic) => {
 
         counts[topic] =
@@ -280,15 +255,9 @@ export default function ProblemsPage() {
 
     });
 
-
     return counts;
 
   }, [problems]);
-
-
-  // -------------------------------------------------------------------------
-  // Topics shown at top
-  // -------------------------------------------------------------------------
 
   const topics = useMemo(() => {
 
@@ -306,11 +275,6 @@ export default function ProblemsPage() {
 
   }, [topicCounts]);
 
-
-  // -------------------------------------------------------------------------
-  // Topic filter tabs
-  // -------------------------------------------------------------------------
-
   const tabs = useMemo(() => {
 
     return [
@@ -322,14 +286,9 @@ export default function ProblemsPage() {
 
   }, [topics]);
 
-
-  // -------------------------------------------------------------------------
-  // Sort + difficulty filter controls
-  // -------------------------------------------------------------------------
-
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
-  const [sortBy, setSortBy] = useState("id"); // "id" | "difficulty" | "acceptance"
-  const [sortDir, setSortDir] = useState("asc"); // "asc" | "desc"
+  const [sortBy, setSortBy] = useState("id");
+  const [sortDir, setSortDir] = useState("asc");
 
   const [filterMenuOpen, setFilterMenuOpen] = useState(false);
   const [difficultyFilters, setDifficultyFilters] = useState(new Set());
@@ -354,7 +313,6 @@ export default function ProblemsPage() {
 
     if (sortBy === field) {
 
-      // clicking the same field again flips direction
       setSortDir((prev) => (prev === "asc" ? "desc" : "asc"));
 
     } else {
@@ -366,18 +324,10 @@ export default function ProblemsPage() {
     setSortMenuOpen(false);
   }
 
-
-  // -------------------------------------------------------------------------
-  // Filter problems (topic + search + difficulty), then sort
-  // -------------------------------------------------------------------------
-
   const filtered = useMemo(() => {
 
     let result =
       problems;
-
-
-    // Topic filter
 
     if (
       activeTab !== "All Topics"
@@ -390,14 +340,12 @@ export default function ProblemsPage() {
             return false;
           }
 
-
           const problemTopics =
             String(problem.topic)
               .split(",")
               .map((topic) =>
                 topic.trim()
               );
-
 
           return problemTopics
             .some(
@@ -408,9 +356,6 @@ export default function ProblemsPage() {
         });
     }
 
-
-    // Difficulty filter
-
     if (difficultyFilters.size > 0) {
 
       result = result.filter((problem) =>
@@ -419,9 +364,6 @@ export default function ProblemsPage() {
         )
       );
     }
-
-
-    // Search filter
 
     if (query.trim()) {
 
@@ -436,9 +378,6 @@ export default function ProblemsPage() {
             .includes(q)
       );
     }
-
-
-    // Sort
 
     const sorted = [...result];
 
@@ -479,26 +418,10 @@ export default function ProblemsPage() {
     sortDir
   ]);
 
-
-  // -------------------------------------------------------------------------
-  // Solved count
-  // -------------------------------------------------------------------------
-  //
-  // For now this remains based on submission status if the backend later
-  // provides it. Your current ProblemResponse does not contain status, so
-  // this will naturally remain 0 until we connect user submissions.
-  // -------------------------------------------------------------------------
-
+  // Reflects real per-user solved status once your backend's /problems
+  // response includes it (via `solved` or `status`) — see isProblemSolved.
   const solvedCount =
-    problems.filter(
-      (p) =>
-        p.status === "done"
-    ).length;
-
-
-  // -------------------------------------------------------------------------
-  // Streak + calendar — real data
-  // -------------------------------------------------------------------------
+    problems.filter(isProblemSolved).length;
 
   const today = useMemo(() => new Date(), []);
   const todayKey = useMemo(() => formatDateKey(today), [today]);
@@ -542,10 +465,6 @@ export default function ProblemsPage() {
 
         setActiveDates(dateSet);
 
-
-        // Current streak: consecutive days ending today with activity.
-        // Stops at the first gap.
-
         let streak = 0;
         let cursor = new Date(today);
 
@@ -585,9 +504,6 @@ export default function ProblemsPage() {
     };
 
   }, [today]);
-
-
-  // Live countdown to midnight, so "Xh Ym Zs left" is real and ticking.
 
   const [now, setNow] = useState(() => new Date());
 
@@ -672,19 +588,10 @@ export default function ProblemsPage() {
 
   function isMissed(day) {
 
-    // A day counts as "missed" only if it's strictly before today and
-    // nothing was submitted on it. Future days and today itself never get
-    // the red dot — today isn't over yet, and the future hasn't happened.
-
     const key = cellDateKey(day);
 
     return key < todayKey && !activeDates.has(key);
   }
-
-
-  // -------------------------------------------------------------------------
-  // Header: streak display + profile dropdown + logout
-  // -------------------------------------------------------------------------
 
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
@@ -698,22 +605,11 @@ export default function ProblemsPage() {
     navigate("/login");
   }
 
-
-  // -------------------------------------------------------------------------
-  // UI
-  // -------------------------------------------------------------------------
-
   return (
 
     <div className="lc-page">
 
-
-      {/* ================================================================ */}
-      {/* Top nav */}
-      {/* ================================================================ */}
-
       <header className="lc-header">
-
 
         <div className="lc-logo">
 
@@ -721,10 +617,9 @@ export default function ProblemsPage() {
             ⌂
           </span>
 
-          LeetCode
+          CodeArena
 
         </div>
-
 
         <nav className="lc-nav">
 
@@ -732,35 +627,34 @@ export default function ProblemsPage() {
             Problems
           </span>
 
+          <Link
+  to="/study-plans"
+  className="lc-nav-item"
+>
+  Studyplan
+</Link>
 
-          <span className="lc-nav-item">
-            Contest
-          </span>
+<Link
+  to="/submissions"
+  className="lc-nav-item"
+>
+  Submissions
+</Link>
 
+<Link
+  to="/leaderboard"
+  className="lc-nav-dropdown"
+>
+  Leaderboard
 
-          <span className="lc-nav-item">
-            Discuss
-          </span>
-
-
-          <span className="lc-nav-dropdown">
-
-            Interview
-
-            <ChevronDown size={14} />
-
-          </span>
-
-          {/* Store removed */}
+  
+</Link>
 
         </nav>
 
-
         <div className="lc-spacer" />
 
-
         <div className="lc-header-right">
-
 
           <div className="lc-search-pill">
 
@@ -779,17 +673,10 @@ export default function ProblemsPage() {
 
           </div>
 
-
           <Bell
             size={18}
             className="lc-icon-muted"
           />
-
-
-          
-
-
-          {/* Streak, mirrored from the calendar card */}
 
           <div className="lc-header-streak">
 
@@ -798,11 +685,6 @@ export default function ProblemsPage() {
             {calendarLoading ? "—" : currentStreak}
 
           </div>
-
-
-          {/* ============================================================ */}
-          {/* Profile — hover state, clickable, logout */}
-          {/* ============================================================ */}
 
           <div className="lc-profile-wrap">
 
@@ -864,32 +746,13 @@ export default function ProblemsPage() {
 
           </div>
 
-
-          {/* Premium removed */}
-
         </div>
 
       </header>
 
-
       <div className="lc-body">
 
-
-        {/* ============================================================ */}
-        {/* Main column */}
-        {/* ============================================================ */}
-
         <main className="lc-main">
-
-
-          {/* ============================================================ */}
-          {/* Promo cards removed */}
-          {/* ============================================================ */}
-
-
-          {/* ============================================================ */}
-          {/* Dynamic Topic chips */}
-          {/* ============================================================ */}
 
           <div className="lc-topics">
 
@@ -919,7 +782,6 @@ export default function ProblemsPage() {
 
             ))}
 
-
             {topics.length > 0 && (
 
               <span>
@@ -929,11 +791,6 @@ export default function ProblemsPage() {
             )}
 
           </div>
-
-
-          {/* ============================================================ */}
-          {/* Dynamic Topic tabs */}
-          {/* ============================================================ */}
 
           <div className="lc-tabs">
 
@@ -959,13 +816,7 @@ export default function ProblemsPage() {
 
           </div>
 
-
-          {/* ============================================================ */}
-          {/* Search + controls */}
-          {/* ============================================================ */}
-
           <div className="lc-controls">
-
 
             <div className="lc-search-box">
 
@@ -983,9 +834,6 @@ export default function ProblemsPage() {
               />
 
             </div>
-
-
-            {/* Sort control */}
 
             <div className="lc-menu-wrap">
 
@@ -1049,9 +897,6 @@ export default function ProblemsPage() {
 
             </div>
 
-
-            {/* Difficulty filter control */}
-
             <div className="lc-menu-wrap">
 
               <button
@@ -1108,9 +953,7 @@ export default function ProblemsPage() {
 
             </div>
 
-
             <div className="lc-spacer" />
-
 
             <span className="lc-solved-count">
 
@@ -1123,26 +966,18 @@ export default function ProblemsPage() {
 
           </div>
 
-
-          {/* ============================================================ */}
-          {/* Problem table */}
-          {/* ============================================================ */}
-
           <div className="lc-table-wrap">
 
             <table className="lc-table">
 
               <tbody>
 
-
-                {/* Loading */}
-
                 {loading && (
 
                   <tr>
 
                     <td
-                      colSpan={6}
+                      colSpan={5}
                       className="lc-table-empty"
                     >
                       Loading problems…
@@ -1152,16 +987,13 @@ export default function ProblemsPage() {
 
                 )}
 
-
-                {/* Error */}
-
                 {!loading &&
                   error && (
 
                   <tr>
 
                     <td
-                      colSpan={6}
+                      colSpan={5}
                       className="lc-table-error"
                     >
                       {error}
@@ -1171,9 +1003,6 @@ export default function ProblemsPage() {
 
                 )}
 
-
-                {/* No problems */}
-
                 {!loading &&
                   !error &&
                   problems.length === 0 && (
@@ -1181,7 +1010,7 @@ export default function ProblemsPage() {
                   <tr>
 
                     <td
-                      colSpan={6}
+                      colSpan={5}
                       className="lc-table-empty"
                     >
 
@@ -1199,9 +1028,6 @@ export default function ProblemsPage() {
 
                 )}
 
-
-                {/* Problems */}
-
                 {!loading &&
   !error &&
   problems.length > 0 &&
@@ -1216,17 +1042,14 @@ export default function ProblemsPage() {
       }`}
     >
 
-      {/* Status */}
       <td className="lc-td-status">
 
         <StatusIcon
-          status={p.status}
+          solved={isProblemSolved(p)}
         />
 
       </td>
 
-
-      {/* Problem title */}
       <td className="lc-td-title">
 
         <a href={`/problems/${p.id}`}>
@@ -1239,8 +1062,6 @@ export default function ProblemsPage() {
 
       </td>
 
-
-      {/* Acceptance */}
       <td className="lc-td-acc">
 
         {(p.acceptanceRate ?? p.acceptance) != null
@@ -1250,8 +1071,6 @@ export default function ProblemsPage() {
 
       </td>
 
-
-      {/* Difficulty */}
       <td
         className={`lc-td-diff ${
           diffClass(p.difficulty)
@@ -1266,27 +1085,14 @@ export default function ProblemsPage() {
 
       </td>
 
-
-      {/* Lock */}
       <td className="lc-td-lock">
 
       </td>
-
-
-      {/* Star */}
-      <td className="lc-td-star">
-
-        <Star size={14} />
-
-      </td>
-
 
     </tr>
 
   ))
 }
-                {/* Search/filter empty */}
-
                 {!loading &&
                   !error &&
                   problems.length > 0 &&
@@ -1295,7 +1101,7 @@ export default function ProblemsPage() {
                   <tr>
 
                     <td
-                      colSpan={6}
+                      colSpan={5}
                       className="lc-table-empty"
                     >
                       No problems match your search.
@@ -1313,15 +1119,7 @@ export default function ProblemsPage() {
 
         </main>
 
-
-        {/* ================================================================ */}
-        {/* Right sidebar */}
-        {/* ================================================================ */}
-
         <aside className="lc-aside">
-
-
-          {/* Calendar — real, backend-driven */}
 
           <div className="lc-card">
 
@@ -1339,7 +1137,6 @@ export default function ProblemsPage() {
 
               </span>
 
-
               <div className="lc-streak-badge">
 
                 🔥 {calendarLoading ? "—" : currentStreak}
@@ -1347,7 +1144,6 @@ export default function ProblemsPage() {
               </div>
 
             </div>
-
 
             <div className="lc-cal-nav">
 
@@ -1369,9 +1165,7 @@ export default function ProblemsPage() {
 
             </div>
 
-
             <div className="lc-cal-grid">
-
 
               {[
                 "S",
@@ -1392,7 +1186,6 @@ export default function ProblemsPage() {
                 </div>
 
               ))}
-
 
               {monthCells.map(
                 (day, i) => (
@@ -1435,7 +1228,6 @@ export default function ProblemsPage() {
             </div>
 
           </div>
-
 
         </aside>
 

@@ -51,6 +51,8 @@ const FEATURES = [
 
 const LANGUAGES = ["Java", "Python", "C++", "JavaScript"];
 
+
+
 const STEPS = [
   { n: 1, title: "Choose a Problem" },
   { n: 2, title: "Write Your Code" },
@@ -66,25 +68,42 @@ function rankClass(rank) {
   return "lp-rank-badge";
 }
 
+const DEMO_STATS = { activeUsers: 128, totalProblems: 42, totalSubmissions: 386, totalTopics: 12 };
+
+const DEMO_LEADERS = [
+  { rank: 1, username: "CodeMaster", solved: 24, accuracy: 92 },
+  { rank: 2, username: "JavaPro", solved: 19, accuracy: 88 },
+  { rank: 3, username: "AlgoExpert", solved: 16, accuracy: 84 },
+  { rank: 4, username: "CodeNinja", solved: 11, accuracy: 78 },
+];
+
 export default function LandingPage() {
-  const [stats, setStats] = useState(null);
+  const [stats, setStats] = useState(DEMO_STATS);
   const [statsLoading, setStatsLoading] = useState(true);
 
-  const [leaders, setLeaders] = useState([]);
+  const [leaders, setLeaders] = useState(DEMO_LEADERS);
   const [leadersLoading, setLeadersLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       setStatsLoading(true);
       const { ok, data } = await apiFetch("/api/platform/stats");
-      setStats(ok ? data : { activeUsers: 0, totalProblems: 0, totalSubmissions: 0, totalTopics: 0 });
+      if (ok && data && (Number(data.activeUsers) > 0 || Number(data.totalProblems) > 0 || Number(data.totalSubmissions) > 0 || Number(data.totalTopics) > 0)) {
+        setStats(data);
+      } else {
+        setStats(DEMO_STATS);
+      }
       setStatsLoading(false);
     })();
 
     (async () => {
       setLeadersLoading(true);
       const { ok, data } = await apiFetch("/api/leaderboard/top?limit=4");
-      setLeaders(ok && Array.isArray(data) ? data : []);
+      if (ok && Array.isArray(data) && data.length > 0) {
+        setLeaders(data);
+      } else {
+        setLeaders(DEMO_LEADERS);
+      }
       setLeadersLoading(false);
     })();
   }, []);

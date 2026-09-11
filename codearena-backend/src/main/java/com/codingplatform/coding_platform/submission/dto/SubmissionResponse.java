@@ -2,7 +2,6 @@ package com.codingplatform.coding_platform.submission.dto;
 
 import java.time.LocalDateTime;
 
-
 import com.codingplatform.coding_platform.submission.entity.ProgrammingLanguage;
 import com.codingplatform.coding_platform.submission.entity.SubmissionStatus;
 
@@ -30,4 +29,16 @@ public class SubmissionResponse {
     private String errorMessage;
 
     private LocalDateTime createdAt;
+
+    // Test case statistics
+    private Integer passedCount;
+
+    private Integer totalCount;
+
+    // Attempt statistics
+    private Long correctAttempts;
+
+    private Long totalAttempts;
+
+    private Double accuracy;
 }

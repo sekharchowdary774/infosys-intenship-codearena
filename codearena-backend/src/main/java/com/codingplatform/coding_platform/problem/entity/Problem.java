@@ -40,6 +40,12 @@ public class Problem extends BaseEntity {
     @Column(nullable = false, length = 500)
     private String topic;
 
+    @Column(name = "examples", columnDefinition = "TEXT")
+    private String examples;
+
+    @Column(name = "constraints", columnDefinition = "TEXT")
+    private String constraints;
+
     @Column(name = "starter_code_java", columnDefinition = "TEXT")
     private String starterCodeJava;
 

@@ -810,3 +810,9 @@ a {
   border-radius: 50%;
   background: #f87171;
 }
+.lc-nav-item,
+.lc-nav-dropdown {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}

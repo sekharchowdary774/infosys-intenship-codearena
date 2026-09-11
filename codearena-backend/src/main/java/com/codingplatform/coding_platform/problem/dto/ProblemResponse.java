@@ -22,6 +22,10 @@ public class ProblemResponse {
 
     private String topic;
 
+    private String examples;
+
+    private String constraints;
+
     private String starterCodeJava;
 
     private String starterCodePython;
@@ -35,4 +39,12 @@ public class ProblemResponse {
     private String hints;
 
     private Integer editorialUnlockAttempts;
+
+    private Double acceptanceRate;
+
+    // True if the CURRENT LOGGED-IN USER has at least one ACCEPTED
+    // submission for this problem. False (not null) for anonymous/
+    // unauthenticated requests, so the frontend's checkmark logic
+    // (isProblemSolved) always gets a real boolean to check.
+    private Boolean solved;
 }

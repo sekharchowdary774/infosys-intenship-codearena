@@ -27,6 +27,10 @@ public class ProblemRequest {
     @NotBlank(message = "Topic is required")
     private String topic;
 
+    private String examples;
+
+    private String constraints;
+
     private String starterCodeJava;
 
     private String starterCodePython;

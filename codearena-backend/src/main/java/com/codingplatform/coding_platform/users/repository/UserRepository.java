@@ -1,6 +1,7 @@
 package com.codingplatform.coding_platform.users.repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import com.codingplatform.coding_platform.common.Role;
@@ -23,5 +24,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
             LocalDateTime start,
             LocalDateTime end
     );
+
     long countByRole(Role role);
+
+    List<User> findByRole(Role role);
 }

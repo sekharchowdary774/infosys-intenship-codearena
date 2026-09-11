@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.codingplatform.coding_platform.common.Role;
 import com.codingplatform.coding_platform.dashboard.dto.DashboardResponse;
 import com.codingplatform.coding_platform.dashboard.dto.LanguageUsageResponse;
 import com.codingplatform.coding_platform.dashboard.dto.RecentSubmissionResponse;
@@ -326,46 +327,39 @@ public class DashboardService {
     private List<LanguageUsageResponse> getLanguageUsage(
             List<Submission> submissions) {
 
-        Map<String, Long> languageCount =
+        Map<String, Set<Long>> languageProblems =
                 submissions.stream()
-
                         .filter(submission ->
-                                submission.getLanguage() != null
+                                submission.getStatus()
+                                        == SubmissionStatus.ACCEPTED
                         )
-
                         .collect(
                                 Collectors.groupingBy(
-
                                         submission ->
-                                                submission
-                                                        .getLanguage()
-                                                        .name(),
+                                                submission.getLanguage().name(),
 
-                                        Collectors.counting()
+                                        Collectors.mapping(
+                                                submission ->
+                                                        submission.getProblem().getId(),
+
+                                                Collectors.toSet()
+                                        )
                                 )
                         );
 
-
-        return languageCount.entrySet()
-
+        return languageProblems.entrySet()
                 .stream()
-
-                .sorted(
-                        Map.Entry
-                                .<String, Long>
-                                        comparingByValue()
-                                .reversed()
-                )
-
                 .map(entry ->
                         new LanguageUsageResponse(
-
                                 entry.getKey(),
-
-                                entry.getValue()
+                                (long) entry.getValue().size()
                         )
                 )
-
+                .sorted(
+                        Comparator.comparing(
+                                LanguageUsageResponse::getProblemsSolved
+                        ).reversed()
+                )
                 .toList();
     }
 
@@ -494,8 +488,9 @@ public class DashboardService {
 
         List<LeaderboardEntry> entries =
                 leaderboardRepository
-                        .findAllByOrderByTotalScoreDescProblemsSolvedDesc();
-
+                        .findByUser_RoleOrderByTotalScoreDescProblemsSolvedDesc(
+                                Role.USER
+                        );
 
         for (int i = 0;
              i < entries.size();

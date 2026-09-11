@@ -1,18 +1,17 @@
 package com.codingplatform.coding_platform.problem.controller;
 
-
 import java.util.List;
 
+import com.codingplatform.coding_platform.hint.dto.EditorialResponse;
 import com.codingplatform.coding_platform.problem.dto.ProblemRequest;
 import com.codingplatform.coding_platform.problem.dto.ProblemResponse;
 import com.codingplatform.coding_platform.problem.service.ProblemService;
+
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-
 
 import lombok.RequiredArgsConstructor;
 
@@ -55,6 +54,17 @@ public class ProblemController {
 
         return ResponseEntity.ok(
                 problemService.getProblemById(id)
+        );
+    }
+
+
+    // GET EDITORIAL
+    @GetMapping("/{id}/editorial")
+    public ResponseEntity<EditorialResponse> getEditorial(
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(
+                problemService.getEditorial(id)
         );
     }
 

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.codingplatform.coding_platform.common.Role;
 import com.codingplatform.coding_platform.leaderboard.dto.LeaderboardResponse;
 import com.codingplatform.coding_platform.leaderboard.entity.LeaderboardEntry;
 import com.codingplatform.coding_platform.leaderboard.repository.LeaderboardRepository;
@@ -32,6 +33,7 @@ public class LeaderboardService {
     private final SubmissionRepository submissionRepository;
 
 
+
     // GET GLOBAL LEADERBOARD
     public List<LeaderboardResponse> getGlobalLeaderboard() {
 
@@ -39,7 +41,9 @@ public class LeaderboardService {
 
         List<LeaderboardEntry> entries =
                 leaderboardRepository
-                        .findAllByOrderByTotalScoreDescProblemsSolvedDesc();
+                        .findByUser_RoleOrderByTotalScoreDescProblemsSolvedDesc(
+                                Role.USER
+                        );
 
         return convertToResponse(entries);
     }
@@ -48,10 +52,9 @@ public class LeaderboardService {
     // REFRESH ALL LEADERBOARD DATA
     public void refreshLeaderboard() {
 
-        List<User> users = userRepository.findAll();
+        List<User> users = userRepository.findByRole(Role.USER);
 
         for (User user : users) {
-
             updateLeaderboardForUser(user);
         }
     }
@@ -182,9 +185,9 @@ public class LeaderboardService {
 
             case EASY -> 10;
 
-            case MEDIUM -> 30;
+            case MEDIUM -> 20;
 
-            case HARD -> 50;
+            case HARD -> 30;
         };
     }
 

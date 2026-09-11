@@ -88,12 +88,12 @@
 
 .lp-btn-ghost:hover {
   border-color: #5a5a5a;
-  color: #fff;
+  color: #000000;
 }
 
 .lp-btn-primary {
-  background: #ffc01e;
-  color: #1a1a1a;
+  background:#000000 ;
+  color:#ffc01e ;
 }
 
 .lp-btn-primary:hover {
@@ -102,15 +102,14 @@
 
 .lp-btn-outline {
   background: transparent;
-  color: #d4d4d4;
+  color: #ffffff;
   border: 1px solid #3a3a3a;
 }
 
 .lp-btn-outline:hover {
   border-color: #ffc01e;
-  color: #ffc01e;
+  color: #000000 ;
 }
-
 /* ---------------- Hero ---------------- */
 .lp-hero {
   background: radial-gradient(circle at 20% 20%, rgba(255, 192, 30, 0.08), transparent 45%), #141414;
