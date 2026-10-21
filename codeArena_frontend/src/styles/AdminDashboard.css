@@ -1,0 +1,689 @@
+/* ---------------------------------------------------------------------
+   AdminDashboard.css — plain CSS, no framework required
+--------------------------------------------------------------------- */
+
+* {
+  box-sizing: border-box;
+}
+
+.ad-app {
+  min-height: 100vh;
+  background: #1a1a1a;
+  color: #d4d4d4;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  display: flex;
+}
+
+/* ---------------- Sidebar ---------------- */
+.ad-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: #1e1e1e;
+  border-right: 1px solid #2c2c2c;
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ad-sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 0 8px 20px;
+}
+
+.ad-sidebar-logo-icon {
+  color: #ffa116;
+  font-size: 18px;
+}
+
+.ad-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  color: #b0b0b0;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  text-align: left;
+  width: 100%;
+}
+
+.ad-nav-item:hover {
+  background: #2c2c2c;
+  color: #fff;
+}
+
+.ad-nav-item-active {
+  background: #2c2c2c;
+  color: #fff;
+}
+
+.ad-nav-item-active svg {
+  color: #ffc01e;
+}
+
+/* ---------------- Main ---------------- */
+.ad-main {
+  flex: 1;
+  min-width: 0;
+  padding: 28px 32px;
+  max-width: 1200px;
+}
+
+.ad-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.ad-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+
+.ad-subtitle {
+  font-size: 12px;
+  color: #8a8a8a;
+  margin-top: 4px;
+}
+
+.ad-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border-radius: 6px;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.ad-btn-primary {
+  background: #ffc01e;
+  color: #1a1a1a;
+}
+
+.ad-btn-primary:hover {
+  background: #ffcf4d;
+}
+
+.ad-btn-secondary {
+  background: #2c2c2c;
+  color: #d4d4d4;
+}
+
+.ad-btn-secondary:hover {
+  background: #3a3a3a;
+}
+
+.ad-btn-danger {
+  background: transparent;
+  color: #f87171;
+  border: 1px solid #4a2c2c;
+}
+
+.ad-btn-danger:hover {
+  background: #2c1a1a;
+}
+
+/* ---------------- Stat cards ---------------- */
+.ad-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.ad-stat-card {
+  background: #1e1e1e;
+  border: 1px solid #2c2c2c;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.ad-stat-label {
+  font-size: 12px;
+  color: #8a8a8a;
+  margin-bottom: 8px;
+}
+
+.ad-stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.ad-stat-icon {
+  color: #ffc01e;
+  margin-bottom: 8px;
+}
+
+/* ---------------- Controls row ---------------- */
+.ad-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.ad-search-box {
+  display: flex;
+  align-items: center;
+  background: #2c2c2c;
+  border-radius: 6px;
+  padding: 8px 12px;
+  flex: 1;
+  max-width: 320px;
+}
+
+.ad-search-box input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #d4d4d4;
+  font-size: 12px;
+  width: 100%;
+  margin-left: 8px;
+}
+
+.ad-search-box input::placeholder {
+  color: #7a7a7a;
+}
+
+.ad-spacer {
+  flex: 1;
+}
+
+.ad-icon-muted {
+  color: #7a7a7a;
+  flex-shrink: 0;
+}
+
+/* ---------------- Table ---------------- */
+.ad-table-wrap {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #2c2c2c;
+}
+
+.ad-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.ad-table thead th {
+  background: #202020;
+  color: #8a8a8a;
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 10px 16px;
+  border-bottom: 1px solid #2c2c2c;
+}
+
+.ad-table tbody tr {
+  border-bottom: 1px solid #2c2c2c;
+}
+
+.ad-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.ad-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.ad-table td {
+  padding: 12px 16px;
+  vertical-align: middle;
+}
+
+.ad-td-title {
+  color: #fff;
+  font-weight: 500;
+}
+
+.ad-td-muted {
+  color: #8a8a8a;
+}
+
+.ad-row-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.ad-icon-btn {
+  background: transparent;
+  border: 1px solid #3a3a3a;
+  color: #b0b0b0;
+  border-radius: 5px;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.ad-icon-btn:hover {
+  background: #2c2c2c;
+  color: #fff;
+}
+
+.ad-icon-btn-danger:hover {
+  background: #2c1a1a;
+  color: #f87171;
+  border-color: #4a2c2c;
+}
+
+.ad-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.ad-badge-easy {
+  background: #113322;
+  color: #4ade80;
+}
+
+.ad-badge-med {
+  background: #332a11;
+  color: #fbbf24;
+}
+
+.ad-badge-hard {
+  background: #331414;
+  color: #f87171;
+}
+
+.ad-badge-active {
+  background: #113322;
+  color: #4ade80;
+}
+
+.ad-badge-banned {
+  background: #331414;
+  color: #f87171;
+}
+
+.ad-badge-admin {
+  background: #201133;
+  color: #c084fc;
+}
+
+.ad-badge-user {
+  background: #1a2233;
+  color: #60a5fa;
+}
+
+.ad-tag-pill {
+  display: inline-block;
+  background: #2c2c2c;
+  color: #b0b0b0;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-right: 4px;
+}
+
+/* ---------------- Empty / loading / error states ---------------- */
+.ad-table-empty {
+  text-align: center;
+  padding: 48px 16px;
+  color: #7a7a7a;
+}
+
+.ad-table-empty-title {
+  color: #c9c9c9;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.ad-table-empty-sub {
+  font-size: 12px;
+  color: #7a7a7a;
+}
+
+.ad-table-error {
+  text-align: center;
+  padding: 40px 16px;
+  color: #f87171;
+}
+
+/* ---------------- Modal ---------------- */
+.ad-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 20px;
+}
+
+.ad-modal {
+  background: #1e1e1e;
+  border: 1px solid #2c2c2c;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.ad-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.ad-modal-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+
+.ad-modal-close {
+  background: transparent;
+  border: none;
+  color: #8a8a8a;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.ad-modal-close:hover {
+  color: #fff;
+}
+
+.ad-field {
+  margin-bottom: 16px;
+}
+
+.ad-label {
+  display: block;
+  font-size: 12px;
+  color: #b0b0b0;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.ad-input,
+.ad-select,
+.ad-textarea {
+  width: 100%;
+  background: #2c2c2c;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  padding: 9px 12px;
+  color: #fff;
+  font-size: 13px;
+  outline: none;
+  font-family: inherit;
+}
+
+.ad-input:focus,
+.ad-select:focus,
+.ad-textarea:focus {
+  border-color: #ffc01e;
+}
+
+.ad-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.ad-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.ad-field-error {
+  color: #f87171;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.ad-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #2c2c2c;
+}
+
+/* ---------------- Test cases list inside modal ---------------- */
+.ad-tc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.ad-tc-item {
+  border: 1px solid #2c2c2c;
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.ad-tc-item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.ad-tc-item-label {
+  font-size: 11px;
+  color: #8a8a8a;
+  margin-bottom: 2px;
+}
+
+.ad-tc-item-value {
+  font-family: "SF Mono", Consolas, monospace;
+  font-size: 12px;
+  color: #d4d4d4;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ad-tc-empty {
+  text-align: center;
+  color: #7a7a7a;
+  font-size: 12px;
+  padding: 20px;
+  border: 1px dashed #3a3a3a;
+  border-radius: 6px;
+}
+
+.ad-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #1e1e1e;
+  border: 1px solid #2c2c2c;
+  border-left: 3px solid #4ade80;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 6px;
+  font-size: 13px;
+  z-index: 60;
+}
+/* ---------------------------------------------------------------------
+   ADD THESE to your existing AdminDashboard.css.
+   Styles the "Manage Study Plan" modal, which currently has no CSS
+   backing its ad-form-grid / ad-modal-actions / ad-study-plan-problem
+   class names.
+--------------------------------------------------------------------- */
+
+/* Untitled h2/p inside a modal header (the manage-study-plan modal uses
+   plain <h2>/<p> instead of .ad-modal-title) */
+
+.ad-modal-header h2 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.ad-modal-header p {
+  margin: 0;
+  font-size: 12px;
+  color: #8a8a8a;
+}
+
+/* ---------------- Add-problem form row ---------------- */
+
+.ad-form-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.ad-form-group label {
+  display: block;
+  font-size: 12px;
+  color: #b0b0b0;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.ad-form-group select,
+.ad-form-group input {
+  width: 100%;
+  background: #2c2c2c;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  padding: 9px 12px;
+  color: #ffffff;
+  font-size: 13px;
+  outline: none;
+  font-family: inherit;
+}
+
+.ad-form-group select:focus,
+.ad-form-group input:focus {
+  border-color: #ffc01e;
+}
+
+/* ---------------- Cancel / Add Problem action row ---------------- */
+
+.ad-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 4px 0 20px;
+}
+
+/* ---------------- Divider between the add-form and the list ---------------- */
+
+.ad-section-divider {
+  height: 1px;
+  background: #2c2c2c;
+  margin: 4px 0 20px;
+}
+
+/* ---------------- "Problems <count>" section heading ---------------- */
+
+.ad-modal-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.ad-modal-section h3 span {
+  background: #2c2c2c;
+  color: #b0b0b0;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 20px;
+}
+
+.ad-empty-state {
+  text-align: center;
+  color: #7a7a7a;
+  font-size: 12px;
+  padding: 24px;
+  border: 1px dashed #3a3a3a;
+  border-radius: 6px;
+}
+
+/* ---------------- Problem rows inside the study plan ---------------- */
+
+.ad-study-plan-problems {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.ad-study-plan-problem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #2c2c2c;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.ad-study-plan-problem-order {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: #2c2410;
+  color: #ffc01e;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ad-study-plan-problem-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ad-study-plan-problem-info strong {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ad-study-plan-problem-info span {
+  color: #8a8a8a;
+  font-size: 11.5px;
+}

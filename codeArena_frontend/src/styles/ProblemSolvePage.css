@@ -1,0 +1,727 @@
+/* ---------------------------------------------------------------------
+   ProblemSolvePage.css — plain CSS, no framework required
+--------------------------------------------------------------------- */
+
+* {
+  box-sizing: border-box;
+}
+
+.ps-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #1a1a1a;
+  color: #d4d4d4;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}
+
+.ps-page button {
+  font-family: inherit;
+}
+
+/* ---------------- Top bar ---------------- */
+.ps-topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  height: 48px;
+  background: #1e1e1e;
+  border-bottom: 1px solid #2c2c2c;
+  flex-shrink: 0;
+}
+
+.ps-icon-btn {
+  background: transparent;
+  border: none;
+  color: #9a9a9a;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.ps-icon-btn:hover {
+  background: #2c2c2c;
+  color: #fff;
+}
+
+.ps-topbar-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #d4d4d4;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.ps-topbar-title:hover {
+  color: #fff;
+}
+
+.ps-topbar-spacer {
+  flex: 1;
+}
+
+.ps-run-btn,
+.ps-submit-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ps-run-btn {
+  background: #2c2c2c;
+  color: #d4d4d4;
+}
+
+.ps-run-btn:hover {
+  background: #3a3a3a;
+}
+
+.ps-submit-btn {
+  background: #2ea44f;
+  color: #fff;
+}
+
+.ps-submit-btn:hover {
+  background: #35c15c;
+}
+
+.ps-run-btn:disabled,
+.ps-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ps-avatar-sm {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #5a5a5a;
+}
+
+.ps-premium-btn {
+  background: #ffc01e;
+  color: #000;
+  font-weight: 600;
+  font-size: 12px;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.ps-coins {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #9a9a9a;
+  font-size: 12px;
+}
+
+/* ---------------- Split layout ---------------- */
+.ps-split {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.ps-left {
+  width: 46%;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #2c2c2c;
+  min-height: 0;
+}
+
+.ps-right {
+  flex: 1;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* ---------------- Left panel tabs ---------------- */
+.ps-left-tabs {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #2c2c2c;
+  flex-shrink: 0;
+  padding: 0 6px;
+}
+
+.ps-left-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: #8a8a8a;
+  font-size: 12.5px;
+  padding: 11px 12px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.ps-left-tab:hover {
+  color: #d4d4d4;
+}
+
+.ps-left-tab-active {
+  color: #fff;
+  border-bottom-color: #ffc01e;
+}
+
+.ps-left-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 20px;
+}
+
+.ps-problem-title {
+  color: #fff;
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+
+.ps-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.ps-diff-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.ps-diff-easy { background: #113322; color: #4ade80; }
+.ps-diff-medium { background: #332a11; color: #fbbf24; }
+.ps-diff-hard { background: #331414; color: #f87171; }
+
+.ps-meta-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #2c2c2c;
+  color: #b0b0b0;
+  border: none;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.ps-meta-pill:hover {
+  background: #3a3a3a;
+  color: #fff;
+}
+
+.ps-meta-dropdown {
+  background: #1e1e1e;
+  border: 1px solid #2c2c2c;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin: -8px 0 16px;
+  font-size: 12px;
+  color: #b0b0b0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ps-meta-dropdown-empty {
+  color: #7a7a7a;
+}
+
+.ps-tag-pill {
+  background: #2c2c2c;
+  color: #d4d4d4;
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 4px;
+}
+
+.ps-spin {
+  animation: ps-spin-anim 0.8s linear infinite;
+}
+
+@keyframes ps-spin-anim {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.ps-description {
+  color: #c9c9c9;
+  line-height: 1.7;
+  font-size: 13.5px;
+  white-space: pre-wrap;
+}
+
+.ps-section-label {
+  color: #fff;
+  font-weight: 600;
+  margin: 20px 0 8px;
+  font-size: 13.5px;
+}
+
+.ps-example-block {
+  background: #1e1e1e;
+  border: 1px solid #2c2c2c;
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+
+.ps-example-block code {
+  font-family: "SF Mono", Consolas, monospace;
+  background: #262626;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.ps-constraints {
+  font-size: 13px;
+  white-space: pre-line;
+  color: #b0b0b0;
+  line-height: 1.8;
+}
+
+.ps-empty-note {
+  color: #7a7a7a;
+  font-size: 13px;
+  padding: 20px 0;
+}
+
+.ps-engage-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #2c2c2c;
+  color: #8a8a8a;
+}
+
+.ps-engage-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  color: #8a8a8a;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.ps-engage-btn:hover {
+  color: #fff;
+}
+
+.ps-engage-btn-active {
+  color: #ffc01e;
+}
+
+/* ---------------- Editor header ---------------- */
+.ps-editor-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #2c2c2c;
+  flex-shrink: 0;
+}
+
+.ps-editor-header-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #d4d4d4;
+  font-size: 12.5px;
+}
+
+.ps-lang-select {
+  background: #2c2c2c;
+  color: #d4d4d4;
+  border: 1px solid #3a3a3a;
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+}
+
+.ps-editor-header-spacer {
+  flex: 1;
+}
+
+.ps-editor-body {
+  flex: 1;
+  min-height: 0;
+}
+
+/* ---------------- Bottom panel (testcases) ---------------- */
+.ps-bottom {
+  height: 260px;
+  border-top: 1px solid #2c2c2c;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.ps-bottom-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #2c2c2c;
+  flex-shrink: 0;
+}
+
+.ps-bottom-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: #8a8a8a;
+  font-size: 12.5px;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.ps-bottom-tab:hover {
+  color: #d4d4d4;
+}
+
+.ps-bottom-tab-active {
+  background: #2c2c2c;
+  color: #fff;
+}
+
+.ps-bottom-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+}
+
+.ps-case-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.ps-case-tab {
+  background: #2c2c2c;
+  color: #b0b0b0;
+  border: none;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.ps-case-tab:hover {
+  background: #3a3a3a;
+}
+
+.ps-case-tab-active {
+  background: #3a3a3a;
+  color: #fff;
+}
+
+.ps-case-tab-pass {
+  color: #4ade80;
+}
+
+.ps-case-tab-fail {
+  color: #f87171;
+}
+
+.ps-case-add {
+  background: transparent;
+  border: 1px dashed #3a3a3a;
+  color: #8a8a8a;
+  border-radius: 5px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.ps-case-add:hover {
+  color: #fff;
+  border-color: #5a5a5a;
+}
+
+.ps-param-field {
+  margin-bottom: 12px;
+}
+
+.ps-param-label {
+  font-size: 11px;
+  color: #8a8a8a;
+  margin-bottom: 6px;
+  font-family: "SF Mono", Consolas, monospace;
+}
+
+.ps-param-input {
+  width: 100%;
+  background: #1e1e1e;
+  border: 1px solid #2c2c2c;
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: #d4d4d4;
+  font-family: "SF Mono", Consolas, monospace;
+  font-size: 12.5px;
+  outline: none;
+}
+
+.ps-param-input:focus {
+  border-color: #ffc01e;
+}
+
+.ps-result-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.ps-result-pass { color: #4ade80; }
+.ps-result-fail { color: #f87171; }
+
+.ps-result-meta {
+  color: #8a8a8a;
+  font-size: 12px;
+  margin-bottom: 16px;
+}
+
+.ps-result-block-label {
+  font-size: 11px;
+  color: #8a8a8a;
+  margin: 12px 0 6px;
+}
+
+.ps-result-block-value {
+  background: #1e1e1e;
+  border: 1px solid #2c2c2c;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-family: "SF Mono", Consolas, monospace;
+  font-size: 12.5px;
+  color: #d4d4d4;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ps-bottom-empty {
+  color: #7a7a7a;
+  font-size: 12.5px;
+  text-align: center;
+  padding: 30px 0;
+}
+
+.ps-loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d4d4d4;
+  font-size: 13px;
+}
+/* ---------------------------------------------------------------------
+   ADD THESE to your existing ProblemSolvePage.css.
+   Additive only.
+--------------------------------------------------------------------- */
+
+/* ---------------- GFG-style submit result ---------------- */
+
+.ps-submit-result {
+  padding-bottom: 8px;
+}
+
+.ps-submit-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px 14px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.ps-submit-header-pass {
+  background: #113322;
+  color: #4ade80;
+}
+
+.ps-submit-header-fail {
+  background: #331414;
+  color: #f87171;
+}
+
+.ps-submit-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.ps-submit-card {
+  background: #1e1e1e;
+  border: 1px solid #2c2c2c;
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.ps-submit-card-highlight {
+  background: #16202b;
+  border-color: #1e3a52;
+}
+
+.ps-submit-card-label {
+  font-size: 11.5px;
+  color: #8a8a8a;
+  margin-bottom: 8px;
+}
+
+.ps-submit-card-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.ps-submit-card-sub {
+  font-size: 11.5px;
+  color: #7a7a7a;
+  margin-top: 6px;
+}
+
+.ps-submitted-code {
+  background: #1e1e1e;
+  border: 1px solid #2c2c2c;
+  border-radius: 6px;
+  padding: 12px 14px;
+  font-family: "SF Mono", Consolas, monospace;
+  font-size: 12.5px;
+  color: #d4d4d4;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-top: 8px;
+}
+
+/* ---------------- Case tab pass/fail states (Test Result view) ---------------- */
+
+.ps-case-tab-pass {
+  color: #4ade80;
+}
+
+.ps-case-tab-fail {
+  color: #f87171;
+}
+
+/* ---------------- Solved badge + acceptance stats ---------------- */
+
+.ps-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ps-title-row .ps-problem-title {
+  margin: 0;
+}
+
+.ps-solved-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #4ade80;
+  font-size: 12.5px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.ps-accept-stats {
+  display: flex;
+  gap: 20px;
+  font-size: 12.5px;
+  color: #8a8a8a;
+  margin-bottom: 16px;
+}
+
+.ps-accept-stats b {
+  color: #d4d4d4;
+  font-weight: 600;
+}
+
+/* ---------------- Hints accordion ---------------- */
+
+.ps-accordion {
+  margin-top: 20px;
+  border-top: 1px solid #2c2c2c;
+}
+
+.ps-accordion-item {
+  border-bottom: 1px solid #2c2c2c;
+}
+
+.ps-accordion-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  border: none;
+  color: #d4d4d4;
+  font-size: 13px;
+  padding: 12px 4px;
+  cursor: pointer;
+}
+
+.ps-accordion-header:hover {
+  color: #fff;
+}
+
+.ps-accordion-header span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ps-accordion-chevron-open {
+  transform: rotate(180deg);
+}
+
+.ps-accordion-body {
+  padding: 0 4px 14px 25px;
+  font-size: 13px;
+  color: #b0b0b0;
+  line-height: 1.6;
+}
